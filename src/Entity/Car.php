@@ -4,11 +4,11 @@ namespace App\Entity;
 
 use App\DataStructure\ArrayCollection;
 
-class Car
+class Car implements Identifiable
 {
     private ?int $id;
 
-    private ?CarType $carType;
+    private ?string $carType;
 
     private ?string $model;
 
@@ -38,18 +38,18 @@ class Car
     }
 
     /**
-     * @return CarType|null
+     * @return string|null
      */
-    public function getCarType(): ?CarType
+    public function getCarType(): ?string
     {
         return $this->carType;
     }
 
     /**
-     * @param CarType|null $carType
+     * @param string|null $carType
      * @return Car
      */
-    public function setCarType(?CarType $carType): Car
+    public function setCarType(?string $carType): Car
     {
         $this->carType = $carType;
         return $this;

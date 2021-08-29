@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-class Client
+class Client implements Identifiable
 {
     private ?int $id;
 

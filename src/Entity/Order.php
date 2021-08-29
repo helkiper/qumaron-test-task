@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-class Order
+class Order implements Identifiable
 {
     private const STATES = ['new' => 'new', 'in work' => 'in work', 'done' => 'done'];  //todo more states
 
-    private ?int $id;
+    private ?int $id = null;
 
     private ?Car $car;
 

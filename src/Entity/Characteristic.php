@@ -4,11 +4,11 @@ namespace App\Entity;
 
 use App\DataStructure\ArrayCollection;
 
-class Characteristic
+class Characteristic implements Identifiable
 {
     private ?int $id;
 
-    private ?string $type;
+    private ?string $name;
 
     private ?array $allowableValues;
 
@@ -44,18 +44,18 @@ class Characteristic
     /**
      * @return string|null
      */
-    public function getType(): ?string
+    public function getName(): ?string
     {
-        return $this->type;
+        return $this->name;
     }
 
     /**
-     * @param string|null $type
+     * @param string|null $name
      * @return Characteristic
      */
-    public function setType(?string $type): Characteristic
+    public function setName(?string $name): Characteristic
     {
-        $this->type = $type;
+        $this->name = $name;
         return $this;
     }
 
