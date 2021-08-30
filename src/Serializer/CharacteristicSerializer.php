@@ -8,7 +8,7 @@ use Exception;
 class CharacteristicSerializer implements Deserializer, Serializer
 {
 
-    public function support($entity, array $data): bool
+    public function support($entity): bool
     {
         return $entity instanceof Characteristic;
     }

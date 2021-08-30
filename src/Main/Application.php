@@ -3,6 +3,7 @@
 namespace App\Main;
 
 use App\Action\Action;
+use App\DependencyInjection\Container;
 
 class Application
 {
@@ -15,6 +16,8 @@ class Application
 
     public function run()
     {
+        Container::init();
+
         $actionName = $this->args[0] ?? '';
         $action = $this->instantiateAction($actionName);
 
@@ -26,15 +29,9 @@ class Application
         $actionNamespace = Configuration::ACTION_NAMESPACE;
         $actionName = $actionNamespace . ucfirst($name) . 'Action';
 
-        if (class_exists($actionName)) {
-            $action = new $actionName();
-            if (! $action instanceof Action) {
-                return null;
-            }
+        $action = Container::get($actionName);
 
-            return $action;
-        }
+        return $action instanceof Action ? $action : null;
 
-        return null;
     }
 }

@@ -5,13 +5,20 @@ namespace App\Serializer;
 use App\Entity\Car;
 use App\Entity\Client;
 use App\Entity\Order;
-use App\Main\Configuration;
 use Exception;
 
 class OrderSerializer implements Deserializer, Serializer
 {
+    private CarSerializer $carSerializer;
+    private ClientSerializer $clientSerializer;
 
-    public function support($entity, array $data): bool
+    public function __construct(CarSerializer $carSerializer, ClientSerializer $clientSerializer)
+    {
+        $this->carSerializer = $carSerializer;
+        $this->clientSerializer = $clientSerializer;
+    }
+
+    public function support($entity): bool
     {
         return $entity instanceof Order;
     }
@@ -28,13 +35,11 @@ class OrderSerializer implements Deserializer, Serializer
         }
 
         $car = new Car();
-        $carDeserializer = new CarSerializer(); //todo inject
-        $carDeserializer->deserialize($car, $data['car']);
+        $this->carSerializer->deserialize($car, $data['car']);
         $entity->setCar($car);
 
         $client = new Client();
-        $clientDeserializer = new ClientSerializer();  //todo inject
-        $clientDeserializer->deserialize($client, $data['client']);
+        $this->clientSerializer->deserialize($client, $data['client']);
         $entity->setClient($client);
     }
 
@@ -44,12 +49,9 @@ class OrderSerializer implements Deserializer, Serializer
      */
     public function serialize($entity): array
     {
-        $carSerializer = new CarSerializer(); //todo inject
-        $clientSerializer = new ClientSerializer(); //todo inject
-
         $result = [
-            'car' => $carSerializer->serialize($entity->getCar()),
-            'client' => $clientSerializer->serialize($entity->getClient())
+            'car' => $this->carSerializer->serialize($entity->getCar()),
+            'client' => $this->clientSerializer->serialize($entity->getClient())
         ];
 
         if (!empty($entity->getId())) {

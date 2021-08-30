@@ -3,6 +3,7 @@
 namespace App\Action;
 
 use App\DataPersister\DataPersister;
+use App\DependencyInjection\Container;
 use App\Entity\Order;
 use App\Main\Configuration;
 use App\Serializer\OrderSerializer;
@@ -10,15 +11,20 @@ use App\Util\JsonFile;
 
 class CreateAction extends Action
 {
+    private OrderSerializer $serializer;
+
+    public function __construct(OrderSerializer $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
     public function run(array $params = [])
     {
-        $orderSerializer = new OrderSerializer(); //todo inject
         $order = new Order();
-        $orderSerializer->deserialize($order, JsonFile::read($params[0] ?? ''));
+        $this->serializer->deserialize($order, JsonFile::read($params[0] ?? ''));
 
-        $dataPersisterClass = Configuration::DATA_PERSISTER;
         /** @var DataPersister $dataPersister */
-        $dataPersister = new $dataPersisterClass();
+        $dataPersister = Container::get(Configuration::DATA_PERSISTER);
         $dataPersister->store($order, Order::class);
 
         echo 'Order stored successfully';

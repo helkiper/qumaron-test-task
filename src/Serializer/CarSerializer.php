@@ -9,8 +9,14 @@ use Exception;
 
 class CarSerializer implements Deserializer, Serializer
 {
+    private CharacteristicSerializer $characteristicSerializer;
 
-    public function support($entity, array $data): bool
+    public function __construct(CharacteristicSerializer $characteristicSerializer)
+    {
+        $this->characteristicSerializer = $characteristicSerializer;
+    }
+
+    public function support($entity): bool
     {
         return $entity instanceof Car;
     }
@@ -38,11 +44,9 @@ class CarSerializer implements Deserializer, Serializer
             ->setCarType($data['type']);
         
         if (isset($data['characteristics']) && is_array($data['characteristics'])) {
-            $characteristicsDeserializer = new CharacteristicSerializer();  //todo inject
-
             foreach ($data['characteristics'] as  $value) {
                 $characteristic = new Characteristic();
-                $characteristicsDeserializer->deserialize($characteristic, $value);
+                $this->characteristicSerializer->deserialize($characteristic, $value);
                 //todo if characteristic supported for car type
                 $entity->addCharacteristic($characteristic);
             }
@@ -56,9 +60,8 @@ class CarSerializer implements Deserializer, Serializer
     public function serialize($entity): array
     {
         $characteristics = [];
-        $characteristicSerializer = new CharacteristicSerializer();
         foreach ($entity->getCharacteristics() as $characteristic) {
-            $characteristics[] = $characteristicSerializer->serialize($characteristic);
+            $characteristics[] = $this->characteristicSerializer->serialize($characteristic);
         }
 
         return [

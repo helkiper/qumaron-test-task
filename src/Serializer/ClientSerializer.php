@@ -2,16 +2,15 @@
 
 namespace App\Serializer;
 
-use App\Entity\Car;
 use App\Entity\Client;
 use Exception;
 
 class ClientSerializer implements Deserializer, Serializer
 {
 
-    public function support($entity, array $data): bool
+    public function support($entity): bool
     {
-        return $entity instanceof Car;
+        return $entity instanceof Client;
     }
 
     /**

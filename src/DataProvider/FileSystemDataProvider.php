@@ -4,9 +4,12 @@ namespace App\DataProvider;
 
 use App\DataStructure\ArrayCollection;
 use App\DataStructure\Collection;
+use App\DependencyInjection\Container;
 use App\Entity\Order;
 use App\Main\Configuration;
+use App\Serializer\Deserializer;
 use App\Serializer\OrderSerializer;
+use App\Serializer\Serializer;
 use App\Util\JsonFile;
 
 class FileSystemDataProvider implements DataProvider
@@ -17,12 +20,19 @@ class FileSystemDataProvider implements DataProvider
         $collection = new ArrayCollection();
 
         $files = preg_grep("/^(" . $entityClass . ")d+$/", scandir(Configuration::DB_DIR)); //todo duplicated
-        $orderSerializer = new OrderSerializer();
         foreach ($files as $file) {
-            $order = new Order();
-            $orderSerializer->deserialize($order, JsonFile::read($file));
+            /** @var Deserializer $deserializer */
+            foreach (Container::getInstancesOf(Deserializer::class) as $deserializer) {
+                if ($deserializer->support($entityClass)) {
+                    $entity = new $entityClass();
+                    $deserializer->deserialize($entity, JsonFile::read($file));
+                    $collection->add($entity);
 
-            $collection->add($order);
+                    continue 2;
+                } else {
+                    throw new \Exception('there are no deserializer found to deserializer entity ' . $entityClass);
+                }
+            }
         }
 
         return $collection;
