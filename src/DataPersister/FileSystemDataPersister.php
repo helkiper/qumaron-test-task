@@ -4,8 +4,6 @@ namespace App\DataPersister;
 
 use App\DependencyInjection\Container;
 use App\Entity\Identifiable;
-use App\Main\Configuration;
-use App\Serializer\OrderSerializer;
 use App\Serializer\Serializer;
 use App\Util\JsonFile;
 

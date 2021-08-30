@@ -21,11 +21,13 @@ class CreateAction extends Action
     public function run(array $params = [])
     {
         $order = new Order();
-        $this->serializer->deserialize($order, JsonFile::read($params[0] ?? ''));
+        $this->serializer->deserialize($order, JsonFile::read(
+            isset($params[0]) ? Configuration::UPLOAD_DIR . '/' . $params[0] : ''
+        ));
 
         /** @var DataPersister $dataPersister */
         $dataPersister = Container::get(Configuration::DATA_PERSISTER);
-        $dataPersister->store($order, Order::class);
+        $dataPersister->store($order, 'Order');
 
         echo 'Order stored successfully';
     }

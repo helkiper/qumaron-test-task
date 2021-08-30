@@ -9,12 +9,8 @@ class JsonFile
 {
     public static function read(string $fileName): array
     {
-        $fileFullName = sprintf(
-            '%s/%s',
-            $_SERVER['DOCUMENT_ROOT'] . Configuration::UPLOAD_DIR,
-//            self::clearNamespace($fileName)
-            $fileName
-    );
+        $fileFullName = $_SERVER['DOCUMENT_ROOT'] . $fileName;
+
         if (!is_file($fileFullName)) {
             throw new RuntimeException(sprintf('File %s not found', $fileFullName));
         }
