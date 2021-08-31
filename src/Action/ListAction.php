@@ -9,11 +9,19 @@ use App\Main\Configuration;
 
 class ListAction extends Action
 {
+    /**
+     * @var DataProvider
+     */
+    private $dataProvider;
+
+    public function __construct()
+    {
+        $this->dataProvider = Container::get(Configuration::DATA_PROVIDER);
+    }
+
     public function run(array $params = [])
     {
-        /** @var DataProvider $dataProvider */
-        $dataProvider = Container::get(Configuration::DATA_PROVIDER);
-        $orders = $dataProvider->findAll(Order::class);
+        $orders = $this->dataProvider->findAll(Order::class);
 
         /** @var Order $order */
         foreach ($orders as $order) {

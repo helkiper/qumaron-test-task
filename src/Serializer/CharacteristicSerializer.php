@@ -27,6 +27,9 @@ class CharacteristicSerializer implements Deserializer, Serializer
         if (isset($data['id'])) {
             $entity->setId($data['id']);
         }
+        if (isset($data['unitOfMeasure'])) {
+            $entity->setUnitOfMeasure($data['unitOfMeasure']);
+        }
 
         $entity
             ->setName($data['name'])
@@ -39,9 +42,15 @@ class CharacteristicSerializer implements Deserializer, Serializer
      */
     public function serialize($entity): array
     {
-        return [
+        $result = [
             'name' => $entity->getName(),
             'value' => $entity->getValue()
         ];
+
+        if (!empty($entity->getUnitOfMeasure())) {
+            $result['unitOfMeasure'] = $entity->getUnitOfMeasure();
+        }
+
+        return $result;
     }
 }

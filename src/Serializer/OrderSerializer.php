@@ -34,6 +34,13 @@ class OrderSerializer implements Deserializer, Serializer
             $entity->setId($data['id']);
         }
 
+        $stages = [];
+        foreach ($data['stages'] as $key => $stage) {
+            $stages[$key] = in_array($stage, [Order::STAGE_START, Order::STAGE_FINISH]) ? $stage : Order::STAGE_START;
+        }
+        $entity->setStages($stages);
+
+
         $car = new Car();
         $this->carSerializer->deserialize($car, $data['car']);
         $entity->setCar($car);
@@ -51,7 +58,8 @@ class OrderSerializer implements Deserializer, Serializer
     {
         $result = [
             'car' => $this->carSerializer->serialize($entity->getCar()),
-            'client' => $this->clientSerializer->serialize($entity->getClient())
+            'client' => $this->clientSerializer->serialize($entity->getClient()),
+            'stages' => $entity->getStages()
         ];
 
         if (!empty($entity->getId())) {

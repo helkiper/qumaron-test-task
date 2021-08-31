@@ -13,9 +13,15 @@ class CreateAction extends Action
 {
     private OrderSerializer $serializer;
 
+    /**
+     * @var DataPersister
+     */
+    private $dataPersister;
+
     public function __construct(OrderSerializer $serializer)
     {
         $this->serializer = $serializer;
+        $this->dataPersister = Container::get(Configuration::DATA_PERSISTER);
     }
 
     public function run(array $params = [])
@@ -23,11 +29,9 @@ class CreateAction extends Action
         $order = new Order();
         $this->serializer->deserialize($order, JsonFile::read(
             isset($params[0]) ? Configuration::UPLOAD_DIR . '/' . $params[0] : ''
-        ));
+        )); //todo extract to separate class hierarchy
 
-        /** @var DataPersister $dataPersister */
-        $dataPersister = Container::get(Configuration::DATA_PERSISTER);
-        $dataPersister->store($order, 'Order');
+        $this->dataPersister->store($order, 'Order');
 
         echo 'Order stored successfully';
     }

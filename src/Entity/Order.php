@@ -4,19 +4,20 @@ namespace App\Entity;
 
 class Order implements Identifiable
 {
-    private const STATES = ['new' => 'new', 'in work' => 'in work', 'done' => 'done'];  //todo more states
+    public const STAGE_START = 'start';
+    public const STAGE_FINISH = 'finish';
 
     private ?int $id = null;
 
-    private ?Car $car;
+    private ?Car $car = null;
 
-    private ?Client $client;
+    private ?Client $client = null;
 
-    private string $state;
+    private array $stages;
 
     public function __construct()
     {
-        $this->state = self::STATES['new'];
+        $this->stages = [];
     }
 
     /**
@@ -34,6 +35,7 @@ class Order implements Identifiable
     public function setId(?int $id): Order
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -52,6 +54,7 @@ class Order implements Identifiable
     public function setCar(?Car $car): Order
     {
         $this->car = $car;
+
         return $this;
     }
 
@@ -70,24 +73,26 @@ class Order implements Identifiable
     public function setClient(?Client $client): Order
     {
         $this->client = $client;
+
         return $this;
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getState(): string
+    public function getStages(): array
     {
-        return $this->state;
+        return $this->stages;
     }
 
     /**
-     * @param string $state
+     * @param array $stages
      * @return Order
      */
-    public function setState(string $state): Order
+    public function setStages(array $stages): Order
     {
-        $this->state = $state;
+        $this->stages = $stages;
+
         return $this;
     }
 }

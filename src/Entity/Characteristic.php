@@ -2,26 +2,27 @@
 
 namespace App\Entity;
 
-use App\DataStructure\ArrayCollection;
-
 class Characteristic implements Identifiable
 {
-    private ?int $id;
+    /**
+     * @var int|null
+     */
+    private ?int $id = null;
 
-    private ?string $name;
+    /**
+     * @var string|null
+     */
+    private ?string $name = null;
 
-    private ?array $allowableValues;
+    /**
+     * @var null
+     */
+    private $value = null;
 
-    private $value;
-
-    private ?string $unitOfMeasure;
-
-    private ArrayCollection $supportedCarTypes;
-
-    public function __construct()
-    {
-        $this->supportedCarTypes = new ArrayCollection();
-    }
+    /**
+     * @var string|null
+     */
+    private ?string $unitOfMeasure = null;
 
     /**
      * @return int|null
@@ -38,6 +39,7 @@ class Characteristic implements Identifiable
     public function setId(?int $id): Characteristic
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -56,24 +58,7 @@ class Characteristic implements Identifiable
     public function setName(?string $name): Characteristic
     {
         $this->name = $name;
-        return $this;
-    }
 
-    /**
-     * @return array|null
-     */
-    public function getAllowableValues(): ?array
-    {
-        return $this->allowableValues;
-    }
-
-    /**
-     * @param array|null $allowableValues
-     * @return Characteristic
-     */
-    public function setAllowableValues(?array $allowableValues): Characteristic
-    {
-        $this->allowableValues = $allowableValues;
         return $this;
     }
 
@@ -92,6 +77,7 @@ class Characteristic implements Identifiable
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -110,29 +96,7 @@ class Characteristic implements Identifiable
     public function setUnitOfMeasure(?string $unitOfMeasure): Characteristic
     {
         $this->unitOfMeasure = $unitOfMeasure;
+
         return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getSupportedCarTypes(): ArrayCollection
-    {
-        return $this->supportedCarTypes;
-    }
-
-    public function addCharacteristic(CarType $carType)
-    {
-        $this->supportedCarTypes->add($carType);
-    }
-
-    public function removeCharacteristic(CarType $carType)
-    {
-        $this->supportedCarTypes->removeElement($carType);        //todo maybe return
-    }
-
-    public function hasCharacteristic(CarType $carType): bool
-    {
-        return $this->supportedCarTypes->contains($carType);
     }
 }

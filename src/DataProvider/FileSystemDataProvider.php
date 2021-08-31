@@ -17,10 +17,9 @@ class FileSystemDataProvider implements DataProvider
         $collection = new ArrayCollection();
         $deserializer = $this->selectDeserializer($entityClass);
 
-        $entityShortClassName = substr($entityClass, strrpos($entityClass, '\\', -1) + 1);
-
-        foreach (scandir($_SERVER['DOCUMENT_ROOT'] . Configuration::DB_DIR) as $file) {
-            if (strpos($file, $entityShortClassName) !== 0) {
+        $dir = $_SERVER['DOCUMENT_ROOT'] . Configuration::DB_DIR; //todo move to 1 place
+        foreach (scandir($dir) as $file) {
+            if (strpos($file, $this->classBasename($entityClass)) !== 0) {
                 continue;
             }
 
@@ -34,6 +33,22 @@ class FileSystemDataProvider implements DataProvider
         return $collection;
     }
 
+    public function find(string $entityClass, int $id): ?object
+    {
+        $fileName = sprintf(
+            '%s/%s%d',
+            Configuration::DB_DIR, //todo move to 1 place
+            $this->classBasename($entityClass),
+            $id
+        );
+
+        $entity = new $entityClass();
+        $deserializer = $this->selectDeserializer($entityClass);
+        $deserializer->deserialize($entity, JsonFile::read($fileName));
+
+        return $entity;
+    }
+
     private function selectDeserializer(string $entityClass): Deserializer
     {
         $entity = new $entityClass();
@@ -44,5 +59,14 @@ class FileSystemDataProvider implements DataProvider
         }
 
         throw new \Exception('there are no deserializer found to deserializer entity ' . $entityClass);
+    }
+
+    /**
+     * @param string $entityClass
+     * @return false|string
+     */
+    private function classBasename(string $entityClass)
+    {
+        return substr($entityClass, strrpos($entityClass, '\\', -1) + 1);
     }
 }

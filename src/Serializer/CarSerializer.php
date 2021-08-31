@@ -31,7 +31,7 @@ class CarSerializer implements Deserializer, Serializer
         if (!isset($data) ||!isset($data['model'])) {
             throw new Exception('car data specified incorrectly');
         }
-        if (!isset($data['type']) || !in_array($data['type'], Configuration::SUPPORTED_CAR_TYPES)) {
+        if (!isset($data['type'])) {
             throw new Exception('incorrect car type');
         }
 

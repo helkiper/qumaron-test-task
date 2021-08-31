@@ -6,12 +6,24 @@ use App\DataStructure\ArrayCollection;
 
 class Car implements Identifiable
 {
-    private ?int $id;
+    /**
+     * @var int|null
+     */
+    private ?int $id = null;
 
-    private ?string $carType;
+    /**
+     * @var string|null
+     */
+    private ?string $carType = null;
 
-    private ?string $model;
+    /**
+     * @var string|null
+     */
+    private ?string $model = null;
 
+    /**
+     * @var ArrayCollection
+     */
     private ArrayCollection $characteristics;
 
     public function __construct()
@@ -34,6 +46,7 @@ class Car implements Identifiable
     public function setId(?int $id): Car
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -52,6 +65,7 @@ class Car implements Identifiable
     public function setCarType(?string $carType): Car
     {
         $this->carType = $carType;
+
         return $this;
     }
 
@@ -70,6 +84,7 @@ class Car implements Identifiable
     public function setModel(?string $model): Car
     {
         $this->model = $model;
+
         return $this;
     }
 
@@ -81,18 +96,40 @@ class Car implements Identifiable
         return $this->characteristics;
     }
 
+    /**
+     * @param Characteristic $characteristic
+     */
     public function addCharacteristic(Characteristic $characteristic)
     {
         $this->characteristics->add($characteristic);
     }
 
+    /**
+     * @param Characteristic $characteristic
+     */
     public function removeCharacteristic(Characteristic $characteristic)
     {
-        $this->characteristics->removeElement($characteristic);        //todo maybe return
+        $this->characteristics->removeElement($characteristic);
     }
 
+    /**
+     * @param Characteristic $characteristic
+     * @return bool
+     */
     public function hasCharacteristic(Characteristic $characteristic): bool
     {
         return $this->characteristics->contains($characteristic);
+    }
+
+    public function printCharacteristics(): string
+    {
+        $s = sprintf("\n%s\n", $this->getModel());
+
+        /** @var Characteristic $characteristic */
+        foreach ($this->getCharacteristics() as $characteristic) {
+            $s .= $characteristic->getName() . ": \t" . $characteristic->getValue() . $characteristic->getUnitOfMeasure() . "\n"; //todo parse uom on create
+        }
+
+        return $s;
     }
 }

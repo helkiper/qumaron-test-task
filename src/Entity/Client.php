@@ -4,10 +4,19 @@ namespace App\Entity;
 
 class Client implements Identifiable
 {
+    /**
+     * @var int|null
+     */
     private ?int $id;
 
+    /**
+     * @var string|null
+     */
     private ?string $name;
 
+    /**
+     * @var string|null
+     */
     private ?string $email;
 
     /**
@@ -25,6 +34,7 @@ class Client implements Identifiable
     public function setId(?int $id): Client
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -43,6 +53,7 @@ class Client implements Identifiable
     public function setName(?string $name): Client
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -61,6 +72,7 @@ class Client implements Identifiable
     public function setEmail(?string $email): Client
     {
         $this->email = $email;
+
         return $this;
     }
 }

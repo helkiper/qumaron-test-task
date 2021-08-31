@@ -9,7 +9,7 @@ class JsonFile
 {
     public static function read(string $fileName): array
     {
-        $fileFullName = $_SERVER['DOCUMENT_ROOT'] . $fileName;
+        $fileFullName = $_SERVER['DOCUMENT_ROOT'] . $fileName; //todo move to 1 place
 
         if (!is_file($fileFullName)) {
             throw new RuntimeException(sprintf('File %s not found', $fileFullName));
@@ -21,22 +21,14 @@ class JsonFile
 
     public static function write(string $fileName, array $data): void
     {
-        $dir = $_SERVER['DOCUMENT_ROOT'] . Configuration::DB_DIR;
+        $dir = $_SERVER['DOCUMENT_ROOT'] . Configuration::DB_DIR; //todo move to 1 place
         if (!is_dir($dir)) {
             mkdir($dir);
         }
 
         file_put_contents(
-//            $dir . '/' . self::clearNamespace($fileName),
             $dir . '/' . $fileName,
             json_encode($data)
         );
-    }
-
-    private static function clearNamespace(string $originalName): string
-    {
-        $parts = explode('\\', $originalName);
-
-        return end($parts);
     }
 }
