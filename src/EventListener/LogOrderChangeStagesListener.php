@@ -7,6 +7,7 @@ use App\Event\Event;
 use App\Event\OrderChangeStateEvent;
 use App\Logger\Logger;
 use App\Main\Configuration;
+use ReflectionException;
 
 class LogOrderChangeStagesListener implements EventListener
 {
@@ -15,12 +16,18 @@ class LogOrderChangeStagesListener implements EventListener
      */
     private $logger;
 
+    /**
+     * @throws ReflectionException
+     */
     public function __construct()
     {
         $this->logger = Container::get(Configuration::LOGGER);
     }
 
-    public function handleEvent(Event $event)
+    /**
+     * @param Event $event
+     */
+    public function handleEvent(Event $event): void
     {
         if (!$event instanceof OrderChangeStateEvent) {
             return;

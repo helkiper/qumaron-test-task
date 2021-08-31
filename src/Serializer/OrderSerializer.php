@@ -9,15 +9,30 @@ use Exception;
 
 class OrderSerializer implements Deserializer, Serializer
 {
+    /**
+     * @var CarSerializer
+     */
     private CarSerializer $carSerializer;
+
+    /**
+     * @var ClientSerializer
+     */
     private ClientSerializer $clientSerializer;
 
+    /**
+     * @param CarSerializer $carSerializer
+     * @param ClientSerializer $clientSerializer
+     */
     public function __construct(CarSerializer $carSerializer, ClientSerializer $clientSerializer)
     {
         $this->carSerializer = $carSerializer;
         $this->clientSerializer = $clientSerializer;
     }
 
+    /**
+     * @param $entity
+     * @return bool
+     */
     public function support($entity): bool
     {
         return $entity instanceof Order;

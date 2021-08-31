@@ -8,9 +8,13 @@ use App\Entity\Order;
 use App\Main\Configuration;
 use App\Serializer\OrderSerializer;
 use App\Util\JsonFile;
+use Exception;
 
-class CreateAction extends Action
+class CreateAction implements Action
 {
+    /**
+     * @var OrderSerializer
+     */
     private OrderSerializer $serializer;
 
     /**
@@ -18,18 +22,25 @@ class CreateAction extends Action
      */
     private $dataPersister;
 
+    /**
+     * @param OrderSerializer $serializer
+     */
     public function __construct(OrderSerializer $serializer)
     {
         $this->serializer = $serializer;
         $this->dataPersister = Container::get(Configuration::DATA_PERSISTER);
     }
 
-    public function run(array $params = [])
+    /**
+     * @param array $params
+     * @throws Exception
+     */
+    public function run(array $params = []): void
     {
         $order = new Order();
         $this->serializer->deserialize($order, JsonFile::read(
             isset($params[0]) ? Configuration::UPLOAD_DIR . '/' . $params[0] : ''
-        )); //todo extract to separate class hierarchy
+        ));
 
         $this->dataPersister->store($order, 'Order');
 

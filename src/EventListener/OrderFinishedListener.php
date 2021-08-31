@@ -2,24 +2,33 @@
 
 namespace App\EventListener;
 
-use App\Entity\Car;
-use App\Entity\Characteristic;
+use App\DependencyInjection\Container;
 use App\Entity\Order;
 use App\Event\Event;
 use App\Event\OrderChangeStateEvent;
+use App\Mailer\Mailer;
 use App\Main\Configuration;
-use App\Service\Mailer;
+use ReflectionException;
 
 class OrderFinishedListener implements EventListener
 {
-    private Mailer $mailer;
+    /**
+     * @var Mailer
+     */
+    private $mailer;
 
-    public function __construct(Mailer $mailer)
+    /**
+     * @throws ReflectionException
+     */
+    public function __construct()
     {
-        $this->mailer = $mailer;
+        $this->mailer = Container::get(Configuration::MAILER);
     }
 
-    public function handleEvent(Event $event)
+    /**
+     * @param Event $event
+     */
+    public function handleEvent(Event $event): void
     {
         if (!$event instanceof OrderChangeStateEvent) {
             return;

@@ -4,5 +4,9 @@ namespace App\DataPersister;
 
 interface DataPersister
 {
-    public function store($entity, string $entityClass);
+    /**
+     * @param $entity
+     * @param string $entityClass
+     */
+    public function store($entity, string $entityClass): void;
 }

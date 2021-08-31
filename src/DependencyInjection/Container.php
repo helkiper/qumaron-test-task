@@ -3,11 +3,21 @@
 namespace App\DependencyInjection;
 
 use LogicException;
+use ReflectionClass;
+use ReflectionException;
 
 class Container
 {
-    private static $classMap = [];
+    /**
+     * @var array
+     */
+    private static array $classMap = [];
 
+    /**
+     * @param string $className
+     * @return object
+     * @throws ReflectionException
+     */
     public static function get(string $className): object
     {
         if (isset(self::$classMap[$className])) {
@@ -17,7 +27,7 @@ class Container
             throw new LogicException(sprintf('Class %s does not exist', $className));
         }
 
-        $refClass = new \ReflectionClass($className);
+        $refClass = new ReflectionClass($className);
         $constructor = $refClass->getConstructor();
         if (is_null($constructor) || empty($constructorParams = $constructor->getParameters())) {
             $instance = new $className();
@@ -48,6 +58,11 @@ class Container
         self::registerClassesInDir(dirname(__DIR__), "App\\");
     }
 
+    /**
+     * @param string $parentClassName
+     * @return array
+     * @throws ReflectionException
+     */
     public static function getInstancesOf(string $parentClassName): array
     {
         $result = [];
@@ -61,6 +76,10 @@ class Container
         return $result;
     }
 
+    /**
+     * @param string $dir
+     * @param string $namespace
+     */
     private static function registerClassesInDir(string $dir, string $namespace)
     {
         foreach (scandir($dir) as $file) {

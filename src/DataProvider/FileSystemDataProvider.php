@@ -8,16 +8,21 @@ use App\DependencyInjection\Container;
 use App\Main\Configuration;
 use App\Serializer\Deserializer;
 use App\Util\JsonFile;
+use Exception;
 
 class FileSystemDataProvider implements DataProvider
 {
-
+    /**
+     * @param string $entityClass
+     * @return Collection
+     * @throws Exception
+     */
     public function findAll(string $entityClass): Collection
     {
         $collection = new ArrayCollection();
         $deserializer = $this->selectDeserializer($entityClass);
 
-        $dir = $_SERVER['DOCUMENT_ROOT'] . Configuration::DB_DIR; //todo move to 1 place
+        $dir = $_SERVER['DOCUMENT_ROOT'] . Configuration::DB_DIR;
         foreach (scandir($dir) as $file) {
             if (strpos($file, $this->classBasename($entityClass)) !== 0) {
                 continue;
@@ -33,11 +38,17 @@ class FileSystemDataProvider implements DataProvider
         return $collection;
     }
 
+    /**
+     * @param string $entityClass
+     * @param int $id
+     * @return object|null
+     * @throws Exception
+     */
     public function find(string $entityClass, int $id): ?object
     {
         $fileName = sprintf(
             '%s/%s%d',
-            Configuration::DB_DIR, //todo move to 1 place
+            Configuration::DB_DIR,
             $this->classBasename($entityClass),
             $id
         );
@@ -49,6 +60,11 @@ class FileSystemDataProvider implements DataProvider
         return $entity;
     }
 
+    /**
+     * @param string $entityClass
+     * @return Deserializer
+     * @throws Exception
+     */
     private function selectDeserializer(string $entityClass): Deserializer
     {
         $entity = new $entityClass();
@@ -58,7 +74,7 @@ class FileSystemDataProvider implements DataProvider
             }
         }
 
-        throw new \Exception('there are no deserializer found to deserializer entity ' . $entityClass);
+        throw new Exception('there are no deserializer found to deserializer entity ' . $entityClass);
     }
 
     /**

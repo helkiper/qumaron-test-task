@@ -8,6 +8,10 @@ use Exception;
 class CharacteristicSerializer implements Deserializer, Serializer
 {
 
+    /**
+     * @param $entity
+     * @return bool
+     */
     public function support($entity): bool
     {
         return $entity instanceof Characteristic;

@@ -7,9 +7,13 @@ use RuntimeException;
 
 class JsonFile
 {
+    /**
+     * @param string $fileName
+     * @return array
+     */
     public static function read(string $fileName): array
     {
-        $fileFullName = $_SERVER['DOCUMENT_ROOT'] . $fileName; //todo move to 1 place
+        $fileFullName = $_SERVER['DOCUMENT_ROOT'] . $fileName;
 
         if (!is_file($fileFullName)) {
             throw new RuntimeException(sprintf('File %s not found', $fileFullName));
@@ -19,9 +23,13 @@ class JsonFile
         return json_decode($content, true);
     }
 
+    /**
+     * @param string $fileName
+     * @param array $data
+     */
     public static function write(string $fileName, array $data): void
     {
-        $dir = $_SERVER['DOCUMENT_ROOT'] . Configuration::DB_DIR; //todo move to 1 place
+        $dir = $_SERVER['DOCUMENT_ROOT'] . Configuration::DB_DIR;
         if (!is_dir($dir)) {
             mkdir($dir);
         }

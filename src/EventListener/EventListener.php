@@ -6,5 +6,8 @@ use App\Event\Event;
 
 interface EventListener
 {
-    public function handleEvent(Event $event);
+    /**
+     * @param Event $event
+     */
+    public function handleEvent(Event $event): void;
 }

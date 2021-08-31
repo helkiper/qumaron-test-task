@@ -3,13 +3,17 @@
 namespace App\DataStructure;
 
 use ArrayIterator;
-use Exception;
-use Traversable;
 
 class ArrayCollection implements Collection
 {
+    /**
+     * @var array
+     */
     private array $elements;
 
+    /**
+     * @param array $elements
+     */
     public function __construct(array $elements = [])
     {
         $this->elements = $elements;
@@ -34,7 +38,7 @@ class ArrayCollection implements Collection
      */
     public function contains($element): bool
     {
-        return in_array($element, $this->elements, true); //todo what does mean strict
+        return in_array($element, $this->elements, true);
     }
 
     /**
@@ -45,18 +49,13 @@ class ArrayCollection implements Collection
         return empty($this->elements);
     }
 
-//    public function remove($key)
-//    {
-//        // TODO: Implement remove() method.
-//    }
-
     /**
      * @param $element
      * @return bool
      */
-    public function removeElement($element): bool //todo rename
+    public function removeElement($element): bool
     {
-        $key = array_search($element, $this->elements, true); //todo what does mean strict
+        $key = array_search($element, $this->elements, true);
 
         if ($key === false) {
             return false;

@@ -4,16 +4,26 @@ namespace App\Main;
 
 use App\Action\Action;
 use App\DependencyInjection\Container;
+use ReflectionException;
 
 class Application
 {
+    /**
+     * @var array
+     */
     private array $args;
 
+    /**
+     * @param array $args
+     */
     public function __construct(array $args)
     {
         $this->args = $args;
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function run()
     {
         Container::init();
@@ -24,6 +34,11 @@ class Application
         $action->run(array_slice($this->args, 1));
     }
 
+    /**
+     * @param string $name
+     * @return Action|null
+     * @throws ReflectionException
+     */
     private function instantiateAction(string $name): ?Action
     {
         $actionNamespace = Configuration::ACTION_NAMESPACE;

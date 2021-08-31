@@ -4,18 +4,27 @@ namespace App\Serializer;
 
 use App\Entity\Car;
 use App\Entity\Characteristic;
-use App\Main\Configuration;
 use Exception;
 
 class CarSerializer implements Deserializer, Serializer
 {
+    /**
+     * @var CharacteristicSerializer
+     */
     private CharacteristicSerializer $characteristicSerializer;
 
+    /**
+     * @param CharacteristicSerializer $characteristicSerializer
+     */
     public function __construct(CharacteristicSerializer $characteristicSerializer)
     {
         $this->characteristicSerializer = $characteristicSerializer;
     }
 
+    /**
+     * @param $entity
+     * @return bool
+     */
     public function support($entity): bool
     {
         return $entity instanceof Car;
@@ -47,7 +56,6 @@ class CarSerializer implements Deserializer, Serializer
             foreach ($data['characteristics'] as  $value) {
                 $characteristic = new Characteristic();
                 $this->characteristicSerializer->deserialize($characteristic, $value);
-                //todo if characteristic supported for car type
                 $entity->addCharacteristic($characteristic);
             }
         }

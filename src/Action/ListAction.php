@@ -7,7 +7,7 @@ use App\DependencyInjection\Container;
 use App\Entity\Order;
 use App\Main\Configuration;
 
-class ListAction extends Action
+class ListAction implements Action
 {
     /**
      * @var DataProvider
@@ -19,7 +19,10 @@ class ListAction extends Action
         $this->dataProvider = Container::get(Configuration::DATA_PROVIDER);
     }
 
-    public function run(array $params = [])
+    /**
+     * @param array $params
+     */
+    public function run(array $params = []): void
     {
         $orders = $this->dataProvider->findAll(Order::class);
 

@@ -6,10 +6,26 @@ use App\Entity\Order;
 
 class OrderChangeStateEvent implements Event
 {
+    /**
+     * @var Order
+     */
     private Order $order;
+
+    /**
+     * @var string
+     */
     private string $stage;
+
+    /**
+     * @var array
+     */
     private array $oldStages;
 
+    /**
+     * @param Order $order
+     * @param string $stage
+     * @param array $oldStages
+     */
     public function __construct(Order $order, string $stage, array $oldStages)
     {
         $this->order = $order;

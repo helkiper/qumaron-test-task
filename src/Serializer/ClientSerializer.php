@@ -8,6 +8,10 @@ use Exception;
 class ClientSerializer implements Deserializer, Serializer
 {
 
+    /**
+     * @param $entity
+     * @return bool
+     */
     public function support($entity): bool
     {
         return $entity instanceof Client;

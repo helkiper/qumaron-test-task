@@ -4,5 +4,5 @@ namespace App\Event;
 
 interface Event
 {
-    //todo
+
 }

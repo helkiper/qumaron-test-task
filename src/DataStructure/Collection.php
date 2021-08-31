@@ -2,34 +2,54 @@
 
 namespace App\DataStructure;
 
-use ArrayAccess;
 use Countable;
 use IteratorAggregate;
 
-interface Collection extends Countable, IteratorAggregate//, ArrayAccess
+interface Collection extends Countable, IteratorAggregate
 {
+    /**
+     * @param $element
+     * @return mixed
+     */
     public function add($element);
+
+    /**
+     * @return mixed
+     */
     public function clear();
+
+    /**
+     * @param $element
+     * @return bool
+     */
     public function contains($element): bool;
+
+    /**
+     * @return bool
+     */
     public function isEmpty(): bool;
-//    public function remove($key);
+
+    /**
+     * @param $element
+     * @return bool
+     */
     public function removeElement($element): bool;
-//    public function containsKey($key);
+
+    /**
+     * @param $key
+     * @return mixed
+     */
     public function get($key);
-//    public function getKeys();
-//    public function getValues();
+
+    /**
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
     public function set($key, $value);
+
+    /**
+     * @return array
+     */
     public function toArray(): array;
-//    public function first();
-//    public function last();
-//    public function key();
-//    public function current();
-//    public function next();
-//    public function exists(Closure $p);
-//    public function filter(Closure $p);
-//    public function forAll(Closure $p);
-//    public function map(Closure $func);
-//    public function partition(Closure $p);
-//    public function indexOf($element);
-//    public function slice($offset, $length = null);
 }

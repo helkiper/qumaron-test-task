@@ -121,13 +121,16 @@ class Car implements Identifiable
         return $this->characteristics->contains($characteristic);
     }
 
+    /**
+     * @return string
+     */
     public function printCharacteristics(): string
     {
         $s = sprintf("\n%s\n", $this->getModel());
 
         /** @var Characteristic $characteristic */
         foreach ($this->getCharacteristics() as $characteristic) {
-            $s .= $characteristic->getName() . ": \t" . $characteristic->getValue() . $characteristic->getUnitOfMeasure() . "\n"; //todo parse uom on create
+            $s .= $characteristic->getName() . ": \t" . $characteristic->getValue() . $characteristic->getUnitOfMeasure() . "\n";
         }
 
         return $s;

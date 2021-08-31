@@ -6,10 +6,16 @@ use App\DependencyInjection\Container;
 use App\Entity\Identifiable;
 use App\Serializer\Serializer;
 use App\Util\JsonFile;
+use Exception;
 
 class FileSystemDataPersister implements DataPersister
 {
-    public function store($entity, string $entityClass)
+    /**
+     * @param $entity
+     * @param string $entityClass
+     * @throws Exception
+     */
+    public function store($entity, string $entityClass): void
     {
         if ($entity instanceof Identifiable && !$entity->getId()) {
             $entity->setId($this->calculateNextId($entityClass));
@@ -27,9 +33,14 @@ class FileSystemDataPersister implements DataPersister
             }
         }
 
-        throw new \Exception('there are no serializer found to serializer entity ' . $entityClass);
+        throw new Exception('there are no serializer found to serializer entity ' . $entityClass);
     }
 
+    /**
+     * @param string $entityClass
+     * @return int
+     * @throws Exception
+     */
     private function calculateNextId(string $entityClass): int
     {
         return random_int(1, 100);

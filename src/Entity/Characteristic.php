@@ -74,7 +74,7 @@ class Characteristic implements Identifiable
      * @param mixed $value
      * @return Characteristic
      */
-    public function setValue($value)
+    public function setValue($value): self
     {
         $this->value = $value;
 

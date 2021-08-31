@@ -3,32 +3,49 @@
 namespace App\Action;
 
 use App\DataPersister\DataPersister;
+use App\DataProvider\DataProvider;
 use App\DependencyInjection\Container;
 use App\Entity\Order;
 use App\Main\Configuration;
-use App\Serializer\OrderSerializer;
 use App\Service\OrderManager;
-use App\Util\JsonFile;
+use Exception;
+use ReflectionException;
 
-class ProcessAction extends Action
+class ProcessAction implements Action
 {
-    private OrderSerializer $serializer;
+    /**
+     * @var OrderManager
+     */
     private OrderManager $manager;
+
+    /**
+     * @var DataPersister
+     */
     private $dataPersister;
 
-    public function __construct(OrderSerializer $serializer, OrderManager $manager)
+    /**
+     * @var DataProvider
+     */
+    private $dataProvider;
+
+    /**
+     * @param OrderManager $manager
+     * @throws ReflectionException
+     */
+    public function __construct(OrderManager $manager)
     {
-        $this->serializer = $serializer;
         $this->manager = $manager;
         $this->dataPersister = Container::get(Configuration::DATA_PERSISTER);
+        $this->dataProvider = Container::get(Configuration::DATA_PROVIDER);
     }
 
-    public function run(array $params = [])
+    /**
+     * @param array $params
+     * @throws Exception
+     */
+    public function run(array $params = []): void
     {
-        $order = new Order();
-        $this->serializer->deserialize($order, JsonFile::read(
-            isset($params[1]) ? Configuration::DB_DIR . '/Order' . $params[1] : ''
-        )); //todo extract to separate class hierarchy
+        $order = $this->dataProvider->find(Order::class, $params[1]);
 
         $this->manager->process($order, $params[0], $order::STAGE_FINISH);
 
