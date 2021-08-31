@@ -1,0 +1,38 @@
+{
+  "client": {
+    "name": "Mahmud",
+    "email": "Vasya@i.ua"
+  },
+  "car": {
+    "type": "легковая",
+    "model": "kia rio",
+    "characteristics": [
+      {
+        "name": "color",
+        "value": "red"
+      },
+      {
+        "name": "engine type",
+        "value": "V6"
+      },
+      {
+        "name": "engine volume",
+        "value": "3.0",
+        "unitOfMeasure": "L"
+      },
+      {
+        "name": "fuel type",
+        "value": "petrol"
+      },
+      {
+        "name": "gear count",
+        "value": 5
+      }
+    ]
+  },
+  "stages": {
+    "project": null,
+    "parts-production": null,
+    "assembly": null
+  }
+}
